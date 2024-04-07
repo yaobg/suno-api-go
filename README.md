@@ -1,0 +1,2 @@
+# suno-api-go
+go
