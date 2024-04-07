@@ -1,6 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="GoORMHelperCache">
+    <option name="schemaMapping">
+      <map>
+        <entry key="BillingInfoResponse">
+          <value>
+            <set>
+              <option value="file://$PROJECT_DIR$/suno.go" />
+            </set>
+          </value>
+        </entry>
+        <entry key="Client">
+          <value>
+            <set>
+              <option value="file://$PROJECT_DIR$/suno.go" />
+            </set>
+          </value>
+        </entry>
+        <entry key="Clips">
+          <value>
+            <set>
+              <option value="file://$PROJECT_DIR$/suno.go" />
+            </set>
+          </value>
+        </entry>
+        <entry key="Config">
+          <value>
+            <set>
+              <option value="file://$PROJECT_DIR$/suno.go" />
+            </set>
+          </value>
+        </entry>
+        <entry key="GenerateLyricsResponse">
+          <value>
+            <set>
+              <option value="file://$PROJECT_DIR$/suno.go" />
+            </set>
+          </value>
+        </entry>
+        <entry key="GenerateRequest">
+          <value>
+            <set>
+              <option value="file://$PROJECT_DIR$/suno.go" />
+            </set>
+          </value>
+        </entry>
+        <entry key="GenerateResponse">
+          <value>
+            <set>
+              <option value="file://$PROJECT_DIR$/suno.go" />
+            </set>
+          </value>
+        </entry>
+        <entry key="Metadata">
+          <value>
+            <set>
+              <option value="file://$PROJECT_DIR$/suno.go" />
+            </set>
+          </value>
+        </entry>
+        <entry key="Sessions">
+          <value>
+            <set>
+              <option value="file://$PROJECT_DIR$/suno.go" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TokenResponse">
+          <value>
+            <set>
+              <option value="file://$PROJECT_DIR$/suno.go" />
+            </set>
+          </value>
+        </entry>
+        <entry key="generateError">
+          <value>
+            <set>
+              <option value="file://$PROJECT_DIR$/suno.go" />
+            </set>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="scannedPathMapping">
+      <map>
+        <entry key="file://$PROJECT_DIR$/suno.go">
+          <value>
+            <ScannedPath>
+              <option name="lastModified" value="1712473582685" />
+              <option name="schema">
+                <list>
+                  <option value="Clips" />
+                  <option value="Metadata" />
+                  <option value="Config" />
+                  <option value="Client" />
+                  <option value="GenerateRequest" />
+                  <option value="GenerateResponse" />
+                  <option value="generateError" />
+                  <option value="GenerateLyricsResponse" />
+                  <option value="TokenResponse" />
+                  <option value="Sessions" />
+                  <option value="BillingInfoResponse" />
+                </list>
+              </option>
+            </ScannedPath>
+          </value>
+        </entry>
+        <entry key="file://$PROJECT_DIR$/suno_test.go">
+          <value>
+            <ScannedPath>
+              <option name="lastModified" value="1712474160825" />
+            </ScannedPath>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="tableStructMapping">
+      <map>
+        <entry key="billing_info_response" value="BillingInfoResponse" />
+        <entry key="client" value="Client" />
+        <entry key="clips" value="Clips" />
+        <entry key="config" value="Config" />
+        <entry key="generate_error" value="generateError" />
+        <entry key="generate_lyrics_response" value="GenerateLyricsResponse" />
+        <entry key="generate_request" value="GenerateRequest" />
+        <entry key="generate_response" value="GenerateResponse" />
+        <entry key="metadata" value="Metadata" />
+        <entry key="sessions" value="Sessions" />
+        <entry key="token_response" value="TokenResponse" />
+      </map>
+    </option>
     <option name="lastTimeChecked" value="1712468785168" />
   </component>
 </project>

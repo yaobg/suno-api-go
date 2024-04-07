@@ -1,17 +1,14 @@
-# Suno-api-go
+package suno_api_go
 
-注：非官方sdk
+import (
+	"fmt"
+	"testing"
+	"time"
+)
 
-## cookie
+const cookie = "***"
 
-![image-20240407111824834.png](image-20240407111824834.png)
-
-
-## Example
-
-### 账户信息
-
-```go
+// TestBillingInfo 账户信息
 func TestBillingInfo(t *testing.T) {
 	c := NewClient(&Config{
 		TimeOut: 10,
@@ -24,11 +21,8 @@ func TestBillingInfo(t *testing.T) {
 	}
 	fmt.Printf("%+v", resp)
 }
-```
 
-### 生成歌曲
-
-```
+// TestGenerate 生成
 func TestGenerate(t *testing.T) {
 	c := NewClient(&Config{
 		TimeOut: 10,
@@ -79,11 +73,8 @@ func TestGenerate(t *testing.T) {
 	<-channel
 	fmt.Printf("%+v", completeMap)
 }
-```
 
-### 歌词优化
-
-```
+// TestGenerateLyrics 歌词优化
 func TestGenerateLyrics(t *testing.T) {
 	c := NewClient(&Config{
 		TimeOut: 10,
@@ -125,5 +116,3 @@ func TestGenerateLyrics(t *testing.T) {
 		fmt.Printf("title %s,text %s", lyricsInfo.Title, lyricsInfo.Text)
 	}
 }
-```
-
