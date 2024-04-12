@@ -1,4 +1,4 @@
-module suno-api-go
+module  github.com/yaobg/suno-api-go
 
 go 1.20
 

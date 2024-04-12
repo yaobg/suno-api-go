@@ -1,11 +1,27 @@
-# Suno-api-go
+# suno-api-go
 
 注：非官方sdk
+
+## Installation
+
+# Go Modules
+
+```
+require github.com/yaobg/suno-api-go v0.0.1
+```
+
+## Usage
+
+The following samples will assist you to become as comfortable as possible with resty library.
+
+```api
+// Import resty into your code and refer it as `suno`.
+import "github.com/yaobg/suno-api-go"
+```
 
 ## cookie
 
 ![image-20240407111824834.png](image-20240407111824834.png)
-
 
 ## Example
 
@@ -13,16 +29,16 @@
 
 ```go
 func TestBillingInfo(t *testing.T) {
-	c := NewClient(&Config{
-		TimeOut: 10,
-		Proxy:   "127.0.0.1:1080",
-		Cookie:  cookie,
-	})
-	resp, err := c.BillingInfo()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("%+v", resp)
+c := NewClient(&Config{
+TimeOut: 10,
+Proxy:   "127.0.0.1:1080",
+Cookie:  cookie,
+})
+resp, err := c.BillingInfo()
+if err != nil {
+panic(err)
+}
+fmt.Printf("%+v", resp)
 }
 ```
 

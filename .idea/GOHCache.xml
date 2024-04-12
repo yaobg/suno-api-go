@@ -84,10 +84,17 @@
     </option>
     <option name="scannedPathMapping">
       <map>
+        <entry key="file://$PROJECT_DIR$/../../demo/main.go">
+          <value>
+            <ScannedPath>
+              <option name="lastModified" value="1712888849955" />
+            </ScannedPath>
+          </value>
+        </entry>
         <entry key="file://$PROJECT_DIR$/suno.go">
           <value>
             <ScannedPath>
-              <option name="lastModified" value="1712473582685" />
+              <option name="lastModified" value="1712888553550" />
               <option name="schema">
                 <list>
                   <option value="Clips" />
@@ -109,7 +116,7 @@
         <entry key="file://$PROJECT_DIR$/suno_test.go">
           <value>
             <ScannedPath>
-              <option name="lastModified" value="1712474160825" />
+              <option name="lastModified" value="1712888553550" />
             </ScannedPath>
           </value>
         </entry>
@@ -130,6 +137,6 @@
         <entry key="token_response" value="TokenResponse" />
       </map>
     </option>
-    <option name="lastTimeChecked" value="1712468785168" />
+    <option name="lastTimeChecked" value="1712888581838" />
   </component>
 </project>
