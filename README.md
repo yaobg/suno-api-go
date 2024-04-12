@@ -6,7 +6,7 @@
 
 ```
 # Go Modules
-require github.com/yaobg/suno-api-go v0.0.1
+require github.com/yaobg/suno-api-go v0.0.4
 ```
 
 ## Usage
