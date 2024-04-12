@@ -10,7 +10,7 @@ const cookie = "***"
 
 // TestBillingInfo 账户信息
 func TestBillingInfo(t *testing.T) {
-	c := NewClient(&Config{
+	c := NewClient(Config{
 		TimeOut: 10,
 		Proxy:   "127.0.0.1:1080",
 		Cookie:  cookie,
@@ -24,12 +24,12 @@ func TestBillingInfo(t *testing.T) {
 
 // TestGenerate 生成
 func TestGenerate(t *testing.T) {
-	c := NewClient(&Config{
+	c := NewClient(Config{
 		TimeOut: 10,
 		Proxy:   "127.0.0.1:1080",
 		Cookie:  cookie,
 	})
-	generate, err := c.Generate(&GenerateRequest{
+	generate, err := c.Generate(GenerateRequest{
 		GptDescriptionPrompt: "乡村音乐",
 		Mv:                   "chirp-v3-0",
 		MakeInstrumental:     false,
@@ -76,7 +76,7 @@ func TestGenerate(t *testing.T) {
 
 // TestGenerateLyrics 歌词优化
 func TestGenerateLyrics(t *testing.T) {
-	c := NewClient(&Config{
+	c := NewClient(Config{
 		TimeOut: 10,
 		Proxy:   "127.0.0.1:1080",
 		Cookie:  cookie,

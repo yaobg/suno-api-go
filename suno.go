@@ -74,7 +74,7 @@ type Client struct {
 }
 
 // NewClient client
-func NewClient(c *Config) *Client {
+func NewClient(c Config) *Client {
 	var (
 		timeOut time.Duration
 	)
@@ -86,7 +86,7 @@ func NewClient(c *Config) *Client {
 		client.SetProxy(c.Proxy)
 	}
 	return &Client{
-		Config: *c,
+		Config: c,
 		client: client,
 	}
 }
@@ -114,7 +114,7 @@ type generateError struct {
 }
 
 // Generate Generate
-func (s *Client) Generate(req *GenerateRequest) (data *GenerateResponse, err error) {
+func (s *Client) Generate(req GenerateRequest) (data *GenerateResponse, err error) {
 	token, err := s.getToken()
 	if err != nil {
 		return nil, err
