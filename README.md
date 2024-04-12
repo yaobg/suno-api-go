@@ -3,10 +3,8 @@
 注：非官方sdk
 
 ## Installation
-
-# Go Modules
-
 ```
+# Go Modules
 require github.com/yaobg/suno-api-go v0.0.1
 ```
 
