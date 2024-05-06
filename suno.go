@@ -232,7 +232,7 @@ type Sessions struct {
 
 // getToken get token
 func (s *Client) getToken() (string, error) {
-	path := "https://clerk.suno.ai/v1/client"
+	path := "https://clerk.suno.com/v1/client"
 	var (
 		result TokenResponse
 	)
@@ -243,7 +243,7 @@ func (s *Client) getToken() (string, error) {
 		Get(path)
 
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("token get is err:%s", err)
 	}
 	if r.StatusCode() != 200 {
 		return "", errors.New(r.String())
@@ -261,7 +261,7 @@ func (s *Client) getToken() (string, error) {
 	}
 	session := sessions[0].(map[string]interface{})
 	// 根据seesion_id获取token
-	path = fmt.Sprintf("https://clerk.suno.ai/v1/client/sessions/%s/tokens", session["id"])
+	path = fmt.Sprintf("https://clerk.suno.com/v1/client/sessions/%s/tokens", session["id"])
 	r, err = s.client.R().
 		SetHeader("Content-Type", "application/json").
 		SetHeader("Cookie", s.Cookie).
