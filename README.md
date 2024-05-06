@@ -1,12 +1,12 @@
 # suno-api-go
 
-注：非官方sdk
+注：suno目前没有go的sdk调用，这个是按照官方web请求封装的一个sdk
 
 ## Installation
 
 ```
 # Go Modules
-require github.com/yaobg/suno-api-go v0.0.1
+require github.com/yaobg/suno-api-go v0.0.4
 ```
 
 ## Usage
