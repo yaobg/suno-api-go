@@ -96,7 +96,11 @@ type GenerateRequest struct {
 	GptDescriptionPrompt string `json:"gpt_description_prompt"` //gpt提示词
 	Mv                   string `json:"mv"`                     //版本
 	Prompt               string `json:"prompt"`                 //提示词
-	MakeInstrumental     bool   `json:"make_instrumental""`     //是否只要音乐
+	MakeInstrumental     bool   `json:"make_instrumental"`      //是否只要音乐
+	Title                string `json:"title"`                  //标题
+	Tags                 string `json:"tags"`                   //风格
+	ContinueAt           int    `json:"continue_at"`            // 扩展歌词对接时间
+	ContinueClipId       string `json:"continue_clip_id"`       // 扩展歌词id
 }
 
 // GenerateResponse	GenerateResponse
@@ -119,9 +123,9 @@ func (s *Client) Generate(req GenerateRequest) (data *GenerateResponse, err erro
 	if err != nil {
 		return nil, err
 	}
-	url := baseUrl + "/api/generate/v2/"
+	path := baseUrl + "/api/generate/v2/"
 	if s.GenerateUrl != "" {
-		url = s.GenerateUrl
+		path = s.GenerateUrl
 	}
 	var (
 		result    GenerateResponse
@@ -134,7 +138,7 @@ func (s *Client) Generate(req GenerateRequest) (data *GenerateResponse, err erro
 		SetBody(payload).
 		SetResult(&result).
 		SetError(resultErr).
-		Post(url)
+		Post(path)
 	if err != nil {
 		return nil, err
 	}
