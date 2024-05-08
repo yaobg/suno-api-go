@@ -169,4 +169,68 @@ func main() {
 	}
 }
 ```
+### 歌曲extend
+```go
+package main
 
+import (
+	"fmt"
+	suno "github.com/yaobg/suno-api-go"
+	"time"
+)
+
+const cookie = ""
+
+func main() {
+	client := suno.NewClient(suno.Config{
+		Proxy:  "127.0.0.1:1080",
+		Cookie: cookie,
+	})
+	generate, err := client.Generate(suno.GenerateRequest{
+		Prompt:         "[Verse]\\nLate at night\\nWhen the stars are bright\\nWe hit the streets\\nReady for a wild ride\\nNo destination\\nJust chasing the noise\\nWith the moon as our guide\\nWe let go of our poise\\n\\nDown the boulevard\\nThe city's so alive\\nThe neon lights flicker\\nAs we're taking a dive\\nWe dance to the rhythm\\nLike nobody's watching\\nHeartbeats syncing\\nBodies pulsating\\n\\n[Verse 2]\\nThrough the alleys\\nWe're chasing the thrill\\nFeeding off the energy\\nCan't get our fill\\nEvery corner turned is a brand-new surprise\\nWe're lost in the maze\\nBut we don't realize",
+		Mv:             "chirp-v3-0",
+		Title:          "乡村音乐",
+		Tags:           "emotional rap",
+		ContinueClipId: "6384daa1-2725-422d-b489-e9916c9dd68c",
+		ContinueAt:     120,
+	})
+	if err != nil {
+		return
+	}
+	var (
+		ids         []string
+		completeMap = make(map[string]interface{})
+		channel     = make(chan struct{})
+	)
+	for _, v := range generate.Clips {
+		ids = append(ids, v.Id)
+	}
+	go func() {
+		defer close(channel)
+		for {
+			if len(completeMap) == len(ids) {
+				break
+			}
+			task, err := client.GenerateTask(ids)
+			if err != nil {
+				panic(err)
+			}
+			if task == nil {
+				panic("task is nil")
+			}
+			for _, v := range task {
+				// 表示完成
+				if v.Status == suno.Complete {
+					completeMap[v.Id] = v
+				}
+			}
+			select {
+			case <-time.After(time.Second * 2):
+				continue
+			}
+		}
+	}()
+	<-channel
+	fmt.Printf("%+v", completeMap)
+}
+```
