@@ -47,7 +47,7 @@ type Metadata struct {
 	Prompt               string      `json:"prompt"`
 	GptDescriptionPrompt string      `json:"gpt_description_prompt"`
 	AudioPromptId        interface{} `json:"audio_prompt_id"`
-	History              interface{} `json:"history"`
+	History              []History   `json:"history"`
 	ConcatHistory        interface{} `json:"concat_history"`
 	Type                 string      `json:"type"`
 	Duration             float64     `json:"duration"`
@@ -55,6 +55,11 @@ type Metadata struct {
 	Stream               bool        `json:"stream"`
 	ErrorType            interface{} `json:"error_type"`
 	ErrorMessage         interface{} `json:"error_message"`
+}
+
+type History struct {
+	Id         string `json:"id"`
+	ContinueAt int    `json:"continue_at"`
 }
 
 // Config 配置
