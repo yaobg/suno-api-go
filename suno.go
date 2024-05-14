@@ -241,7 +241,7 @@ type Sessions struct {
 
 // getToken get token
 func (s *Client) getToken() (string, error) {
-	path := "https://clerk.suno.com/v1/client"
+	path := "https://clerk.suno.com/v1/client?_clerk_js_version=4.72.2"
 	var (
 		result TokenResponse
 	)
@@ -252,13 +252,13 @@ func (s *Client) getToken() (string, error) {
 		Get(path)
 
 	if err != nil {
-		return "", fmt.Errorf("token get is err:%s", err)
+		return "", fmt.Errorf("get token Authorization err:%s", err)
 	}
 	if r.StatusCode() != 200 {
 		return "", errors.New(r.String())
 	}
 	if result.Response == nil {
-		return "", errors.New("response is empty")
+		return "", errors.New("token Authorization is null ")
 	}
 	lastActiveSessionId := result.Response["last_active_session_id"]
 	if lastActiveSessionId == "" {
