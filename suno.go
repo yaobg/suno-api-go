@@ -98,14 +98,14 @@ func NewClient(c Config) *Client {
 
 // GenerateRequest GenerateRequest
 type GenerateRequest struct {
-	GptDescriptionPrompt string  `json:"gpt_description_prompt,omitempty"` //gpt提示词
-	Mv                   string  `json:"mv"`                               //版本
-	Prompt               string  `json:"prompt"`                           //提示词
-	MakeInstrumental     bool    `json:"make_instrumental"`                //是否只要音乐
-	Title                string  `json:"title"`                            //标题
-	Tags                 string  `json:"tags"`                             //风格
-	ContinueAt           float64 `json:"continue_at"`                      // 扩展歌词对接时间
-	ContinueClipId       string  `json:"continue_clip_id"`                 // 扩展歌词id
+	GptDescriptionPrompt string `json:"gpt_description_prompt,omitempty"` //gpt提示词
+	Mv                   string `json:"mv"`                               //版本
+	Prompt               string `json:"prompt"`                           //提示词
+	MakeInstrumental     bool   `json:"make_instrumental"`                //是否只要音乐
+	Title                string `json:"title"`                            //标题
+	Tags                 string `json:"tags"`                             //风格
+	ContinueAt           int    `json:"continue_at"`                      // 扩展歌词对接时间
+	ContinueClipId       string `json:"continue_clip_id"`                 // 扩展歌词id
 }
 
 // GenerateResponse	GenerateResponse
