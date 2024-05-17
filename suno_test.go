@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const cookie = ""
+const cookie = "__stripe_mid=93948001-3358-408f-a3c4-4feb639b53be8bcbdd; _cfuvid=zKALjthoW4p1ql7trAka1sTI6SZ1xR31fnQFGcF2_Kk-1715683561636-0.0.1.1-604800000; __client=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNsaWVudF8yZzVJeXNvTUR2M0FsTUhmVzU1OWxCRHN5ZHYiLCJyb3RhdGluZ190b2tlbiI6ImZ3aXc2Z2F2eWtzMmI2dW93NWhmOGN0b25mZnhpcWJrZHFscTNhb2EifQ.un01jZqVX7a3kP8VqZyQGqKftd15k1yEbWzWIZRfpYEUztqV3s9LX7Gk5o_ty-1GJBuIRozlgXBd8TL0ENiDg1YmNNiZRGocKrDLiIDtxZYDVoGlsll9_bBRRqEhHCj2jg3GvyFgzt3Wpqm0F53RQaMoSTEkGd-CTTMJ_XLAnMCvsC8lkNBpoG_WR2Piu7iHawQWE73uC9ODott-noZzXRY6jXLDL3juNKmA_N83uI4kWlXq9p68wYriXgSCsKWD8jRY2p1ewrvrlFt8rXaPdVizSWeZjG1j-JxS_4KDLLwrTR2F5oLzKFpB3ymyNIwGi2eVpfvxjHvE2qQCTFFS-Q; __client_uat=1715683575; __cf_bm=hcCKFOBO0TVztSM9tjhNQ9zLMZ1piaQdDgTr8RPB6xk-1715939251-1.0.1.1-ny3a9l1S2HCAuNhhmM0Z0wm3kOb2o4czTJhGoKVCLa8ixB1APG9H81g7TpwhAgQ.U8_dg55iwR5omgHEfp5jrQ"
 
 // TestBillingInfo 账户信息
 func TestBillingInfo(t *testing.T) {
@@ -181,11 +181,11 @@ func TestExtendMusic(t *testing.T) {
 		Cookie:  cookie,
 	})
 	generate, err := c.Generate(GenerateRequest{
-		Prompt:         "[Verse]\\nLate at night\\nWhen the stars are bright\\nWe hit the streets\\nReady for a wild ride\\nNo destination\\nJust chasing the noise\\nWith the moon as our guide\\nWe let go of our poise\\n\\nDown the boulevard\\nThe city's so alive\\nThe neon lights flicker\\nAs we're taking a dive\\nWe dance to the rhythm\\nLike nobody's watching\\nHeartbeats syncing\\nBodies pulsating\\n\\n[Verse 2]\\nThrough the alleys\\nWe're chasing the thrill\\nFeeding off the energy\\nCan't get our fill\\nEvery corner turned is a brand-new surprise\\nWe're lost in the maze\\nBut we don't realize",
+		Prompt:         "[Verse]\n在田野里漫步\n看着风儿轻轻吹过\n远方的山峦消失在云雾里\n我心中的宁静永不磨灭\n\n[Verse 2]\n河水流淌在田野间\n闪烁着金色的阳光\n大地为我敞开怀抱\n欢迎我去感受大自然\n\n[Chorus]\n这就是我爱上的田野风光\n大自然的韵律让我心生憧憬\n在这片广袤的土地上\n我找到了属于我的快乐",
 		Mv:             "chirp-v3-0",
 		Title:          "乡村音乐",
 		Tags:           "emotional rap",
-		ContinueClipId: "6384daa1-2725-422d-b489-e9916c9dd68c",
+		ContinueClipId: "6b704b7f-3629-431e-b1e8-1d532a92d448",
 		ContinueAt:     120,
 	})
 	if err != nil {

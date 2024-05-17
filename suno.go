@@ -98,14 +98,14 @@ func NewClient(c Config) *Client {
 
 // GenerateRequest GenerateRequest
 type GenerateRequest struct {
-	GptDescriptionPrompt string `json:"gpt_description_prompt"` //gpt提示词
-	Mv                   string `json:"mv"`                     //版本
-	Prompt               string `json:"prompt"`                 //提示词
-	MakeInstrumental     bool   `json:"make_instrumental"`      //是否只要音乐
-	Title                string `json:"title"`                  //标题
-	Tags                 string `json:"tags"`                   //风格
-	ContinueAt           int    `json:"continue_at"`            // 扩展歌词对接时间
-	ContinueClipId       string `json:"continue_clip_id"`       // 扩展歌词id
+	GptDescriptionPrompt string  `json:"gpt_description_prompt,omitempty"` //gpt提示词
+	Mv                   string  `json:"mv"`                               //版本
+	Prompt               string  `json:"prompt"`                           //提示词
+	MakeInstrumental     bool    `json:"make_instrumental"`                //是否只要音乐
+	Title                string  `json:"title"`                            //标题
+	Tags                 string  `json:"tags"`                             //风格
+	ContinueAt           float64 `json:"continue_at"`                      // 扩展歌词对接时间
+	ContinueClipId       string  `json:"continue_clip_id"`                 // 扩展歌词id
 }
 
 // GenerateResponse	GenerateResponse
@@ -137,16 +137,15 @@ func (s *Client) Generate(req GenerateRequest) (data *GenerateResponse, err erro
 		resultErr generateError
 	)
 	payload, _ := json.Marshal(req)
-	r, err := s.client.R().
+	fmt.Println(string(payload))
+	// 需要忽略错误，因为扩展音乐的时候,http 200的时候,err不为空
+	r, _ := s.client.R().
 		SetHeader("Content-Type", "application/json").
 		SetHeader("Authorization", fmt.Sprintf("Bearer %s", token)).
 		SetBody(payload).
 		SetResult(&result).
 		SetError(resultErr).
 		Post(path)
-	if err != nil {
-		return nil, err
-	}
 	if r.StatusCode() != 200 {
 		return nil, errors.New(r.String())
 	}
