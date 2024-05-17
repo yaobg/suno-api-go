@@ -137,7 +137,7 @@ func (s *Client) Generate(req GenerateRequest) (data *GenerateResponse, err erro
 		resultErr generateError
 	)
 	payload, _ := json.Marshal(req)
-	_, err = s.client.R().
+	r, err := s.client.R().
 		SetHeader("Content-Type", "application/json").
 		SetHeader("Authorization", fmt.Sprintf("Bearer %s", token)).
 		SetBody(payload).
@@ -146,6 +146,9 @@ func (s *Client) Generate(req GenerateRequest) (data *GenerateResponse, err erro
 		Post(path)
 	if err != nil {
 		return nil, err
+	}
+	if r.StatusCode() != 200 {
+		return nil, errors.New(r.String())
 	}
 	if resultErr.Detail != "" {
 		return nil, errors.New(resultErr.Detail)
