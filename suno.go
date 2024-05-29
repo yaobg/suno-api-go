@@ -263,7 +263,7 @@ func (s *Client) getToken() (string, error) {
 		return "", errors.New("token Authorization is null ")
 	}
 	lastActiveSessionId := result.Response["last_active_session_id"]
-	if lastActiveSessionId == "" {
+	if lastActiveSessionId == nil {
 		return "", errors.New("active seesion_id is empty")
 	}
 	sessions := result.Response["sessions"].([]interface{})
