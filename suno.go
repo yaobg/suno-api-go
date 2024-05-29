@@ -260,11 +260,11 @@ func (s *Client) getToken() (string, error) {
 		return "", errors.New(r.String())
 	}
 	if result.Response == nil {
-		return "", errors.New("token Authorization is null ")
+		return "", errors.New("authentication_invalid")
 	}
 	lastActiveSessionId := result.Response["last_active_session_id"]
 	if lastActiveSessionId == nil {
-		return "", errors.New("active seesion_id is empty")
+		return "", errors.New("authentication_invalid")
 	}
 	sessions := result.Response["sessions"].([]interface{})
 	var token struct {
