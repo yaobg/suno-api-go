@@ -2,17 +2,20 @@ package suno_api_go
 
 import (
 	"fmt"
+	"os"
 	"testing"
 	"time"
 )
 
-const cookie = "***"
+var cookie = os.Getenv("suno_cookie")
+
+const proxy = "http://127.0.0.1:1080"
 
 // TestBillingInfo 账户信息
 func TestBillingInfo(t *testing.T) {
 	c := NewClient(Config{
 		TimeOut: 10,
-		Proxy:   "127.0.0.1:1080",
+		Proxy:   proxy,
 		Cookie:  cookie,
 	})
 	resp, err := c.BillingInfo()
@@ -26,7 +29,7 @@ func TestBillingInfo(t *testing.T) {
 func TestGenerateByPrompt(t *testing.T) {
 	c := NewClient(Config{
 		TimeOut: 10,
-		Proxy:   "127.0.0.1:1080",
+		Proxy:   proxy,
 		Cookie:  cookie,
 	})
 	generate, err := c.Generate(GenerateRequest{
@@ -47,6 +50,7 @@ func TestGenerateByPrompt(t *testing.T) {
 	for _, v := range generate.Clips {
 		ids = append(ids, v.Id)
 	}
+	tm := time.NewTimer(2 * time.Second)
 	go func() {
 		defer close(channel)
 		for {
@@ -67,7 +71,7 @@ func TestGenerateByPrompt(t *testing.T) {
 				}
 			}
 			select {
-			case <-time.After(time.Second * 2):
+			case <-tm.C:
 				continue
 			}
 		}
@@ -80,7 +84,7 @@ func TestGenerateByPrompt(t *testing.T) {
 func TestGenerateByGpt(t *testing.T) {
 	c := NewClient(Config{
 		TimeOut: 10,
-		Proxy:   "127.0.0.1:1080",
+		Proxy:   proxy,
 		Cookie:  cookie,
 	})
 	generate, err := c.Generate(GenerateRequest{
@@ -101,6 +105,7 @@ func TestGenerateByGpt(t *testing.T) {
 	for _, v := range generate.Clips {
 		ids = append(ids, v.Id)
 	}
+	tm := time.NewTimer(2 * time.Second)
 	go func() {
 		defer close(channel)
 		for {
@@ -121,7 +126,7 @@ func TestGenerateByGpt(t *testing.T) {
 				}
 			}
 			select {
-			case <-time.After(time.Second * 2):
+			case <-tm.C:
 				continue
 			}
 		}
@@ -134,7 +139,7 @@ func TestGenerateByGpt(t *testing.T) {
 func TestGenerateLyrics(t *testing.T) {
 	c := NewClient(Config{
 		TimeOut: 10,
-		Proxy:   "127.0.0.1:1080",
+		Proxy:   proxy,
 		Cookie:  cookie,
 	})
 	id, err := c.GenerateLyrics("Verse 1:\\n在黑暗的深渊里\\n我心中的火焰燃烧\\n肆意挥洒着狂野的力量\\n毫不畏惧,勇往直前\\n\\nChorus:\\n狂风呼啸,雷电交加\\n潜藏在内心的怒火释放\\n无尽的痛苦,无尽的恐惧\\n唯有摇滚乐撼动心魂")
@@ -159,12 +164,6 @@ func TestGenerateLyrics(t *testing.T) {
 				lyricsInfo = resp
 				break
 			}
-			select {
-			case <-time.After(time.Second * 2):
-				continue
-			case <-time.After(time.Second * 10):
-				return
-			}
 		}
 	}()
 	<-channel
@@ -177,7 +176,7 @@ func TestGenerateLyrics(t *testing.T) {
 func TestExtendMusic(t *testing.T) {
 	c := NewClient(Config{
 		TimeOut: 10,
-		Proxy:   "127.0.0.1:1080",
+		Proxy:   proxy,
 		Cookie:  cookie,
 	})
 	generate, err := c.Generate(GenerateRequest{
@@ -199,6 +198,7 @@ func TestExtendMusic(t *testing.T) {
 	for _, v := range generate.Clips {
 		ids = append(ids, v.Id)
 	}
+	tm := time.NewTimer(2 * time.Second)
 	go func() {
 		defer close(channel)
 		for {
@@ -219,7 +219,7 @@ func TestExtendMusic(t *testing.T) {
 				}
 			}
 			select {
-			case <-time.After(time.Second * 2):
+			case <-tm.C:
 				continue
 			}
 		}

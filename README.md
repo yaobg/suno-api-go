@@ -34,14 +34,18 @@ import (
 	suno "github.com/yaobg/suno-api-go"
 )
 
-const cookie = ""
+var cookie = os.Getenv("suno_cookie")
 
-func main() {
-	client := suno.NewClient(suno.Config{
-		Proxy:  "127.0.0.1:1080",
-		Cookie: cookie,
+const proxy = "http://127.0.0.1:1080"
+
+// TestBillingInfo 账户信息
+func TestBillingInfo(t *testing.T) {
+	c := NewClient(Config{
+		TimeOut: 10,
+		Proxy:   proxy,
+		Cookie:  cookie,
 	})
-	resp, err := client.BillingInfo()
+	resp, err := c.BillingInfo()
 	if err != nil {
 		panic(err)
 	}
@@ -61,17 +65,18 @@ import (
 	"time"
 )
 
-const cookie = ""
-
-func main() {
-	client := suno.NewClient(suno.Config{
-		Proxy:  "127.0.0.1:1080",
-		Cookie: cookie,
+func TestGenerateByPrompt(t *testing.T) {
+	c := NewClient(Config{
+		TimeOut: 10,
+		Proxy:   proxy,
+		Cookie:  cookie,
 	})
-	generate, err := client.Generate(suno.GenerateRequest{
-		GptDescriptionPrompt: "乡村音乐",
-		Mv:                   "chirp-v3-0",
-		MakeInstrumental:     false,
+	generate, err := c.Generate(GenerateRequest{
+		Prompt:           "(Verse 1)\nWoke up this morning with dreams on my mind,\nChasing all the stars, but you're the one that I find.\nDiamonds and gold, they mean nothing at all,\nIf I ain't got you, I’m destined to fall.\n(Pre-Chorus)\nFame and fortune, they can come and they can go,\nBut your love's the only truth I know.\nIn a world full of glittering lies,\nYou're my solace, my endless skies.\n(Chorus)\nIf I ain't got you, it all means nothing,\nYou're my treasure, my heart's true loving.\nIf I ain't got you, it's a world so hollow,\nIn your eyes, my dreams I follow.\n(Verse 2)\nTravelled the world, seen everything’s glow,\nBut home is where you are, and that's all I need to know.\nEvery beat of my heart belongs to you,\nWithout your love, I don't know what I'd do.\n(Pre-Chorus)\nFame and fortune, they can come and they can go,\nBut your love's the only truth I know.\nIn a world full of glittering lies,\nYou're my solace, my endless skies.\n(Chorus)\nIf I ain't got you, it all means nothing,\nYou're my treasure, my heart’s true loving.\nIf I ain't got you, it's a world so hollow,\nIn your eyes, my dreams I follow.\n(Bridge)\nAll the money in the world can’t buy\nThe feeling of a love so high,\nAnd every breath I take, I take for you,\nIn your arms, I find what’s true.\n(Chorus)\nIf I ain't got you, it all means nothing,\nYou’re my treasure, my heart’s true loving.\nIf I ain't got you, it's a world so hollow,\nIn your eyes, my dreams I follow.\n(Outro)\nIf I ain't got you, I’ve got no tomorrow,\nFor your love, I'd trade all my sorrow.\nIf I ain't got you, it all fades away,\nWith you, my love, forever I’ll stay.",
+		Mv:               "chirp-v3-0",
+		MakeInstrumental: false,
+		Title:            "乡村音乐",
+		Tags:             "emotional rap",
 	})
 	if err != nil {
 		return
@@ -84,13 +89,14 @@ func main() {
 	for _, v := range generate.Clips {
 		ids = append(ids, v.Id)
 	}
+	tm := time.NewTimer(2 * time.Second)
 	go func() {
 		defer close(channel)
 		for {
 			if len(completeMap) == len(ids) {
 				break
 			}
-			task, err := client.GenerateTask(ids)
+			task, err := c.GenerateTask(ids)
 			if err != nil {
 				panic(err)
 			}
@@ -99,12 +105,12 @@ func main() {
 			}
 			for _, v := range task {
 				// 表示完成
-				if v.Status == suno.Complete {
+				if v.Status == Complete {
 					completeMap[v.Id] = v
 				}
 			}
 			select {
-			case <-time.After(time.Second * 2):
+			case <-tm.C:
 				continue
 			}
 		}
@@ -126,14 +132,13 @@ import (
 	"time"
 )
 
-const cookie = ""
-
-func main() {
-	client := suno.NewClient(suno.Config{
-		Proxy:  "127.0.0.1:1080",
-		Cookie: cookie,
+func TestGenerateLyrics(t *testing.T) {
+	c := NewClient(Config{
+		TimeOut: 10,
+		Proxy:   proxy,
+		Cookie:  cookie,
 	})
-	id, err := client.GenerateLyrics("Verse 1:\\n在黑暗的深渊里\\n我心中的火焰燃烧\\n肆意挥洒着狂野的力量\\n毫不畏惧,勇往直前\\n\\nChorus:\\n狂风呼啸,雷电交加\\n潜藏在内心的怒火释放\\n无尽的痛苦,无尽的恐惧\\n唯有摇滚乐撼动心魂")
+	id, err := c.GenerateLyrics("Verse 1:\\n在黑暗的深渊里\\n我心中的火焰燃烧\\n肆意挥洒着狂野的力量\\n毫不畏惧,勇往直前\\n\\nChorus:\\n狂风呼啸,雷电交加\\n潜藏在内心的怒火释放\\n无尽的痛苦,无尽的恐惧\\n唯有摇滚乐撼动心魂")
 	if err != nil {
 		panic(err)
 	}
@@ -141,25 +146,19 @@ func main() {
 		panic("id is empty")
 	}
 	var (
-		lyricsInfo *suno.GenerateLyricsResponse
+		lyricsInfo *GenerateLyricsResponse
 		channel    = make(chan struct{})
 	)
 	go func() {
 		defer close(channel)
 		for {
-			resp, err := client.GetFormatLyrics(id)
+			resp, err := c.GetFormatLyrics(id)
 			if err != nil {
 				return
 			}
-			if resp.Status == suno.Complete {
+			if resp.Status == Complete {
 				lyricsInfo = resp
 				break
-			}
-			select {
-			case <-time.After(time.Second * 2):
-				continue
-			case <-time.After(time.Second * 10):
-				return
 			}
 		}
 	}()
@@ -168,6 +167,7 @@ func main() {
 		fmt.Printf("title %s,text %s", lyricsInfo.Title, lyricsInfo.Text)
 	}
 }
+
 ```
 ### 歌曲extend
 ```go
@@ -179,19 +179,18 @@ import (
 	"time"
 )
 
-const cookie = ""
-
-func main() {
-	client := suno.NewClient(suno.Config{
-		Proxy:  "127.0.0.1:1080",
-		Cookie: cookie,
+func TestExtendMusic(t *testing.T) {
+	c := NewClient(Config{
+		TimeOut: 10,
+		Proxy:   proxy,
+		Cookie:  cookie,
 	})
-	generate, err := client.Generate(suno.GenerateRequest{
-		Prompt:         "[Verse]\\nLate at night\\nWhen the stars are bright\\nWe hit the streets\\nReady for a wild ride\\nNo destination\\nJust chasing the noise\\nWith the moon as our guide\\nWe let go of our poise\\n\\nDown the boulevard\\nThe city's so alive\\nThe neon lights flicker\\nAs we're taking a dive\\nWe dance to the rhythm\\nLike nobody's watching\\nHeartbeats syncing\\nBodies pulsating\\n\\n[Verse 2]\\nThrough the alleys\\nWe're chasing the thrill\\nFeeding off the energy\\nCan't get our fill\\nEvery corner turned is a brand-new surprise\\nWe're lost in the maze\\nBut we don't realize",
+	generate, err := c.Generate(GenerateRequest{
+		Prompt:         "[Verse]\n在田野里漫步\n看着风儿轻轻吹过\n远方的山峦消失在云雾里\n我心中的宁静永不磨灭\n\n[Verse 2]\n河水流淌在田野间\n闪烁着金色的阳光\n大地为我敞开怀抱\n欢迎我去感受大自然\n\n[Chorus]\n这就是我爱上的田野风光\n大自然的韵律让我心生憧憬\n在这片广袤的土地上\n我找到了属于我的快乐",
 		Mv:             "chirp-v3-0",
 		Title:          "乡村音乐",
 		Tags:           "emotional rap",
-		ContinueClipId: "6384daa1-2725-422d-b489-e9916c9dd68c",
+		ContinueClipId: "6b704b7f-3629-431e-b1e8-1d532a92d448",
 		ContinueAt:     120,
 	})
 	if err != nil {
@@ -205,13 +204,14 @@ func main() {
 	for _, v := range generate.Clips {
 		ids = append(ids, v.Id)
 	}
+	tm := time.NewTimer(2 * time.Second)
 	go func() {
 		defer close(channel)
 		for {
 			if len(completeMap) == len(ids) {
 				break
 			}
-			task, err := client.GenerateTask(ids)
+			task, err := c.GenerateTask(ids)
 			if err != nil {
 				panic(err)
 			}
@@ -220,12 +220,12 @@ func main() {
 			}
 			for _, v := range task {
 				// 表示完成
-				if v.Status == suno.Complete {
+				if v.Status == Complete {
 					completeMap[v.Id] = v
 				}
 			}
 			select {
-			case <-time.After(time.Second * 2):
+			case <-tm.C:
 				continue
 			}
 		}
