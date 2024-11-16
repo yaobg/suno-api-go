@@ -2,12 +2,12 @@ package suno_api_go
 
 import (
 	"fmt"
-	"os"
 	"testing"
 	"time"
 )
 
-var cookie = os.Getenv("suno_cookie")
+// var cookie = os.Getenv("suno_cookie")
+var cookie = "__client=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNsaWVudF8ybUV0aW51NkpXWDAxcVpJNUxzU3Z5WnV2YXYiLCJyb3RhdGluZ190b2tlbiI6InZ0ZXRvbTV2MnFsaG9sbDkydjFuNnQyaGZ1Y3Qwb3BkYWNyam5xNmgifQ.cK0rlPNwe0NIXMvXqrQTGP81U6qLDTqCZu8FHGiraG0t3U9meAwyuUZdw65Io9XGJ4RBt7Tnx2X-L1CzazWrdQMIbf12YS2TGvN-1BR9YfQNdMjzmzY3dzCEr3fScqh_3iWjEeOSBlsC1Q_pf3qXuH9CZ1GpVP6fUog9Tv-7AQSKOYrsJXvGTmmZHkeaROmd-nvAKY0ZcUH7QZwKr1w9J_xsI32XVP0XWYkKKAAAiafBpu0X5C4YnB9hRZkoxSsZbxaVYOYdLHGNZjEOwON3As1kI_LWvz_DJBFodTbCcxv7QrlzAQ3n1JzX9g5ksGq_bNvRXXcPMLGMCFZQEZl4hQ; __client_uat=1726653698; _ga=GA1.1.1305511025.1726653704; __client_uat_U9tcbTPE=1726653698; ajs_anonymous_id=eb4f290b-6bec-4188-9128-c9ec801d6e40; _cfuvid=yjKW53GH4r14jZheYEt8EPmRJ8zhnaWkOsxfzWSprNA-1731653528924-0.0.1.1-604800000; __cf_bm=CgkTHg8AyH_y.wv2hGRLzsnJa8y7IS.DAcD3FxXOsFw-1731656293-1.0.1.1-ZxbNR.yezygquk6p8f3vXqbc.PHf.QiipB2LEtbUUzV4JI6aVxopr8RPdwL6RNKj0_jo.UQCkLS_chYZ23bwNg; _ga_7B0KEDD7XP=GS1.1.1731654788.5.1.1731657077.0.0.0"
 
 const proxy = "http://127.0.0.1:1080"
 
@@ -186,6 +186,8 @@ func TestExtendMusic(t *testing.T) {
 		Tags:           "emotional rap",
 		ContinueClipId: "6b704b7f-3629-431e-b1e8-1d532a92d448",
 		ContinueAt:     120,
+		GenerationType: GenerationTypeText.ToString(),
+		Task:           "extend",
 	})
 	if err != nil {
 		return

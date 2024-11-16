@@ -18,65 +18,7 @@ const (
 
 const baseUrl = "https://studio-api.suno.ai"
 
-// Clips clips
-type Clips struct {
-	Detail            string      `json:"detail"`
-	Id                string      `json:"id"`
-	VideoUrl          string      `json:"video_url"`
-	AudioUrl          string      `json:"audio_url"`
-	ImageUrl          string      `json:"image_url"`
-	ImageLargeUrl     string      `json:"image_large_url"`
-	MajorModelVersion string      `json:"major_model_version"`
-	ModelName         string      `json:"model_name"`
-	Metadata          *Metadata   `json:"metadata"`
-	IsLiked           bool        `json:"is_liked"`
-	UserId            string      `json:"user_id"`
-	IsTrashed         bool        `json:"is_trashed"`
-	Reaction          interface{} `json:"reaction"`
-	CreatedAt         time.Time   `json:"created_at"`
-	Status            string      `json:"status"`
-	Title             string      `json:"title"`
-	PlayCount         int         `json:"play_count"`
-	UpvoteCount       int         `json:"upvote_count"`
-	IsPublic          bool        `json:"is_public"`
-}
-
-// Metadata Metadata
-type Metadata struct {
-	Tags                 string      `json:"tags"`
-	Prompt               string      `json:"prompt"`
-	GptDescriptionPrompt string      `json:"gpt_description_prompt"`
-	AudioPromptId        interface{} `json:"audio_prompt_id"`
-	History              []History   `json:"history"`
-	ConcatHistory        interface{} `json:"concat_history"`
-	Type                 string      `json:"type"`
-	Duration             float64     `json:"duration"`
-	RefundCredits        bool        `json:"refund_credits"`
-	Stream               bool        `json:"stream"`
-	ErrorType            interface{} `json:"error_type"`
-	ErrorMessage         interface{} `json:"error_message"`
-}
-
-type History struct {
-	Id         string `json:"id"`
-	ContinueAt int    `json:"continue_at"`
-}
-
-// Config 配置
-type Config struct {
-	Proxy       string
-	Cookie      string
-	TimeOut     int64
-	GenerateUrl string // 生成歌词Url地址
-}
-
 type option func(config *Config)
-
-// Client client
-type Client struct {
-	Config
-	client *resty.Client
-}
 
 // NewClient client
 func NewClient(c Config) *Client {
@@ -96,32 +38,9 @@ func NewClient(c Config) *Client {
 	}
 }
 
-// GenerateRequest GenerateRequest
-type GenerateRequest struct {
-	GptDescriptionPrompt string `json:"gpt_description_prompt,omitempty"` //gpt提示词
-	Mv                   string `json:"mv"`                               //版本
-	Prompt               string `json:"prompt"`                           //提示词
-	MakeInstrumental     bool   `json:"make_instrumental"`                //是否只要音乐
-	Title                string `json:"title"`                            //标题
-	Tags                 string `json:"tags"`                             //风格
-	ContinueAt           int    `json:"continue_at"`                      //扩展歌词对接时间
-	ContinueClipId       string `json:"continue_clip_id"`                 //扩展歌词id
-	Task                 string `json:"task"`                             //任务类型 扩展：extend
-	GenerationType       string `json:"generation_type"`                  //生成类型 文本：text
-}
-
-// GenerateResponse	GenerateResponse
-type GenerateResponse struct {
-	Id                string  `json:"id"`
-	Clips             []Clips `json:"clips"`
-	Metadata          `json:"metadata"`
-	MajorModelVersion string `json:"major_model_version"`
-	Status            string `json:"status"`
-	CreatedAt         string `json:"created_at"`
-	BatchSize         int    `json:"batch_size"`
-}
-type generateError struct {
-	Detail string `json:"detail"`
+func (g generateError) ToString() string {
+	data, _ := json.Marshal(g)
+	return string(data)
 }
 
 // Generate Generate
@@ -151,8 +70,8 @@ func (s *Client) Generate(req GenerateRequest) (data *GenerateResponse, err erro
 	if r.StatusCode() != 200 {
 		return nil, errors.New(r.String())
 	}
-	if resultErr.Detail != "" {
-		return nil, errors.New(resultErr.Detail)
+	if resultErr.Detail != nil {
+		return nil, errors.New(resultErr.ToString())
 	}
 	return &result, nil
 }
@@ -174,12 +93,6 @@ func (s *Client) GenerateTask(ids []string) (data []Clips, err error) {
 		SetResult(&result).
 		Get(fmt.Sprintf("%s/api/feed/?ids=%s", baseUrl, url.PathEscape(strings.Join(ids, ","))))
 	return result, nil
-}
-
-type GenerateLyricsResponse struct {
-	Text   string `json:"text"`
-	Title  string `json:"title"`
-	Status string `json:"status"`
 }
 
 // GenerateLyrics generate lyrics
@@ -234,15 +147,6 @@ func (s *Client) GetFormatLyrics(id string) (data *GenerateLyricsResponse, err e
 	return &result, nil
 }
 
-// TokenResponse token 响应值
-type TokenResponse struct {
-	Response map[string]interface{} `json:"response"`
-}
-
-type Sessions struct {
-	Id string `json:"id"`
-}
-
 // getToken get token
 func (s *Client) getToken() (string, error) {
 	path := "https://clerk.suno.com/v1/client?_clerk_js_version=4.72.2"
@@ -287,15 +191,6 @@ func (s *Client) getToken() (string, error) {
 		return "", errors.New(r.String())
 	}
 	return token.JWT, nil
-}
-
-// BillingInfoResponse 账单信息
-type BillingInfoResponse struct {
-	IsActive         bool  `json:"is_active"`
-	IsPastDue        bool  `json:"is_past_due"`
-	Credits          int64 `json:"credits"`
-	SubscriptionType bool  `json:"subscription_type"`
-	TotalCreditsLeft int64 `json:"total_credits_left"`
 }
 
 // BillingInfo 获取账单信息
