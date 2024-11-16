@@ -104,8 +104,10 @@ type GenerateRequest struct {
 	MakeInstrumental     bool   `json:"make_instrumental"`                //是否只要音乐
 	Title                string `json:"title"`                            //标题
 	Tags                 string `json:"tags"`                             //风格
-	ContinueAt           int    `json:"continue_at"`                      // 扩展歌词对接时间
-	ContinueClipId       string `json:"continue_clip_id"`                 // 扩展歌词id
+	ContinueAt           int    `json:"continue_at"`                      //扩展歌词对接时间
+	ContinueClipId       string `json:"continue_clip_id"`                 //扩展歌词id
+	Task                 string `json:"task"`                             //任务类型 扩展：extend
+	GenerationType       string `json:"generation_type"`                  //生成类型 文本：text
 }
 
 // GenerateResponse	GenerateResponse
