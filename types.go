@@ -119,11 +119,44 @@ type BillingInfoResponse struct {
 	TotalCreditsLeft int64 `json:"total_credits_left"`
 }
 
-// TokenResponse token 响应值
-type TokenResponse struct {
-	Response map[string]interface{} `json:"response"`
+type Sessions struct {
+	Object                   string          `json:"object"`
+	ID                       string          `json:"id"`
+	Status                   string          `json:"status"`
+	ExpireAt                 int64           `json:"expire_at"`
+	AbandonAt                int64           `json:"abandon_at"`
+	LastActiveAt             int64           `json:"last_active_at"`
+	LastActiveOrganizationID *string         `json:"last_active_organization_id"`
+	Actor                    *string         `json:"actor"`
+	FactorVerificationAge    []int           `json:"factor_verification_age"`
+	CreatedAt                int64           `json:"created_at"`
+	UpdatedAt                int64           `json:"updated_at"`
+	LastActiveToken          LastActiveToken `json:"last_active_token"`
+}
+type LastActiveToken struct {
+	Object string `json:"object"`
+	Jwt    string `json:"jwt"`
 }
 
-type Sessions struct {
-	Id string `json:"id"`
+// LyricsPairResponse 新版歌词响应值
+type LyricsPairResponse struct {
+	LyricsAId       string `json:"lyrics_a_id"`
+	LyricsBId       string `json:"lyrics_b_id"`
+	LyricsRequestId string `json:"lyrics_request_id"`
+}
+
+// TokenResponse token
+type TokenResponse struct {
+	Response struct {
+		Object              string      `json:"object"`
+		ID                  string      `json:"id"`
+		Sessions            []Sessions  `json:"sessions"`
+		SignIn              interface{} `json:"sign_in"`
+		SignUp              interface{} `json:"sign_up"`
+		LastActiveSessionID string      `json:"last_active_session_id"`
+		CookieExpiresAt     *string     `json:"cookie_expires_at"`
+		CreatedAt           int64       `json:"created_at"`
+		UpdatedAt           int64       `json:"updated_at"`
+	} `json:"response"`
+	Client interface{} `json:"client"`
 }

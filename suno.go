@@ -67,6 +67,7 @@ func (s *Client) Generate(req GenerateRequest) (data *GenerateResponse, err erro
 		SetResult(&result).
 		SetError(resultErr).
 		Post(path)
+	fmt.Println(string(r.Body()))
 	if r.StatusCode() != 200 {
 		return nil, errors.New(r.String())
 	}
@@ -124,6 +125,34 @@ func (s *Client) GenerateLyrics(prompt string) (id string, err error) {
 	return result["id"], nil
 }
 
+// GenerateLyricsPair generate lyrics-pair
+func (s *Client) GenerateLyricsPair(prompt string) (result *LyricsPairResponse, err error) {
+	token, err := s.getToken()
+	if err != nil {
+		return nil, err
+	}
+	path := baseUrl + "/api/generate/lyrics-pair/"
+	var req struct {
+		Prompt      string `json:"prompt"`
+		LyricsModel string `json:"lyrics_model"`
+	}
+	req.Prompt = prompt
+	r, err := s.client.R().
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Authorization", fmt.Sprintf("Bearer %s", token)).
+		SetHeader("User-Agent", "PostmanRuntime/7.42.0").
+		SetBody(req).
+		SetResult(result).
+		Post(path)
+	if err != nil {
+		return nil, err
+	}
+	if r.StatusCode() != 200 {
+		return nil, errors.New(r.String())
+	}
+	return result, nil
+}
+
 // GetFormatLyrics get Format lyrics
 func (s *Client) GetFormatLyrics(id string) (data *GenerateLyricsResponse, err error) {
 	token, err := s.getToken()
@@ -149,48 +178,30 @@ func (s *Client) GetFormatLyrics(id string) (data *GenerateLyricsResponse, err e
 
 // getToken get token
 func (s *Client) getToken() (string, error) {
+	if s.Cookie == "" {
+		return "", errors.New("cookie is empty")
+	}
 	path := "https://clerk.suno.com/v1/client?_clerk_js_version=4.72.2"
 	var (
-		result TokenResponse
+		tokenRes TokenResponse
 	)
 	r, err := s.client.R().
 		SetHeader("Content-Type", "application/json").
 		SetHeader("Cookie", s.Cookie).
-		SetResult(&result).
+		SetResult(&tokenRes).
 		Get(path)
-
 	if err != nil {
 		return "", fmt.Errorf("get token Authorization err:%s", err)
 	}
 	if r.StatusCode() != 200 {
 		return "", errors.New(r.String())
 	}
-	if result.Response == nil {
-		return "", errors.New("authentication_invalid")
+	fmt.Printf(string(r.Body()))
+	if tokenRes.Response.Sessions == nil || len(tokenRes.Response.Sessions) == 0 {
+		return "", fmt.Errorf("get token Authorization")
 	}
-	lastActiveSessionId := result.Response["last_active_session_id"]
-	if lastActiveSessionId == nil {
-		return "", errors.New("authentication_invalid")
-	}
-	sessions := result.Response["sessions"].([]interface{})
-	var token struct {
-		JWT string `json:"jwt"`
-	}
-	session := sessions[0].(map[string]interface{})
-	// 根据seesion_id获取token
-	path = fmt.Sprintf("https://clerk.suno.com/v1/client/sessions/%s/tokens", session["id"])
-	r, err = s.client.R().
-		SetHeader("Content-Type", "application/json").
-		SetHeader("Cookie", s.Cookie).
-		SetResult(&token).
-		Post(path)
-	if err != nil {
-		return "", err
-	}
-	if r.StatusCode() != 200 {
-		return "", errors.New(r.String())
-	}
-	return token.JWT, nil
+	token := tokenRes.Response.Sessions[0].LastActiveToken.Jwt
+	return token, nil
 }
 
 // BillingInfo 获取账单信息
